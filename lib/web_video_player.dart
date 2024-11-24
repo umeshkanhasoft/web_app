@@ -28,6 +28,7 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
   RxInt currentPlayerIndex = 0.obs;
   RxBool videoIsLoaded = false.obs;
   VideoPlayerController? videoPlayerController;
+  RxString title = "".obs;
 
   @override
   void initState() {
@@ -52,8 +53,8 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
           Map<String, dynamic> movieObject = (data['AllMovieDataList'] as List)
               .firstWhere((element) => (element as Map)['id'] == videoId,
                   orElse: () => {});
-          print(uri.queryParameters.containsKey('hd'));
           if (movieObject.isNotEmpty) {
+            if (movieObject.containsKey('mn')) title.value = movieObject['mn'];
             bool isHd = uri.queryParameters.containsKey('hd') &&
                 (uri.queryParameters['hd'] as String) == "true";
             List<String> hdArray = [
@@ -167,6 +168,18 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(title.value),
+      ),
+      endDrawer: const Drawer(
+        child: Center(
+          child: Column(
+            children: [
+              Text('End Drawer'),
+            ],
+          ),
+        ),
+      ),
       body: Obx(() {
         return isLoading.value && videoIsLoaded.value == false
             ? const Center(
