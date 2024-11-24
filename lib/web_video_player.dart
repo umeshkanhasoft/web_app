@@ -169,7 +169,9 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title.value),
+        title: Obx(() {
+          return Text(title.value);
+        }),
       ),
       endDrawer: const Drawer(
         child: Center(
