@@ -33,70 +33,70 @@
     <title>web_app</title>
     <link rel="manifest" href="manifest.json">
     <script>
-        document.addEventListener('contextmenu', function (event) {
-          event.preventDefault();
-          alert("Right-click is disabled.");
-        });
-    </script>
+            document.addEventListener('contextmenu', function (event) {
+              event.preventDefault();
+              alert("Right-click is disabled.");
+            });
+        </script>
     <script>
-        document.addEventListener('keydown', function (event) {
-          if (event.key === "F12" || (event.ctrlKey && event.shiftKey && event.key === "I")) {
-            event.preventDefault();
-            alert("Inspect element is disabled.");
-          }
-        });
-    </script>
+            document.addEventListener('keydown', function (event) {
+              if (event.key === "F12" || (event.ctrlKey && event.shiftKey && event.key === "I")) {
+                event.preventDefault();
+                alert("Inspect element is disabled.");
+              }
+            });
+        </script>
 
-    <!--    <script async="async" src="https://connect.facebook.net/en_US/fbinstant.js"></script>-->
-    <!--    <script>-->
-    <!--        const rewardedAdUnitId = '224530612046551_224532765379669'; // Replace with your actual Ad Unit ID-->
+<!--    <script async="async" src="https://connect.facebook.net/en_US/fbinstant.js"></script>-->
+<!--    <script>-->
+<!--        const rewardedAdUnitId = '224530612046551_224532765379669'; // Replace with your actual Ad Unit ID-->
 
-    <!--        window.fbAsyncInit = function() {-->
-    <!--            FBInstant.initializeAsync().then(function() {-->
-    <!--                console.log("FBInstant initialized successfully.");-->
+<!--        window.fbAsyncInit = function() {-->
+<!--            FBInstant.initializeAsync().then(function() {-->
+<!--                console.log("FBInstant initialized successfully.");-->
 
-    <!--                // Now setup event listeners after initialization-->
-    <!--                onRewardedAdCompleted(function() {-->
-    <!--                    console.log('Rewarded ad completed!');-->
-    <!--                });-->
+<!--                // Now setup event listeners after initialization-->
+<!--                onRewardedAdCompleted(function() {-->
+<!--                    console.log('Rewarded ad completed!');-->
+<!--                });-->
 
-    <!--                // Show the ad after initialization-->
-    <!--                showRewardedAd();-->
-    <!--            }).catch(function(error) {-->
-    <!--                console.error("Error initializing FBInstant:", error);-->
-    <!--            });-->
-    <!--        };-->
+<!--                // Show the ad after initialization-->
+<!--                showRewardedAd();-->
+<!--            }).catch(function(error) {-->
+<!--                console.error("Error initializing FBInstant:", error);-->
+<!--            });-->
+<!--        };-->
 
-    <!--        // Show the rewarded ad-->
-    <!--        function showRewardedAd() {-->
-    <!--            if (FBInstant) {-->
-    <!--                FBInstant.loadAsync().then(function() {-->
-    <!--                    FBInstant.showAdAsync(rewardedAdUnitId).then(function() {-->
-    <!--                        console.log('Rewarded video ad displayed');-->
-    <!--                    }).catch(function(error) {-->
-    <!--                        console.log('Error showing rewarded video ad: ' + error);-->
-    <!--                    });-->
-    <!--                }).catch(function(error) {-->
-    <!--                    console.error('Error loading FBInstant ad: ' + error);-->
-    <!--                });-->
-    <!--            } else {-->
-    <!--                console.error('FBInstant is not available.');-->
-    <!--            }-->
-    <!--        }-->
+<!--        // Show the rewarded ad-->
+<!--        function showRewardedAd() {-->
+<!--            if (FBInstant) {-->
+<!--                FBInstant.loadAsync().then(function() {-->
+<!--                    FBInstant.showAdAsync(rewardedAdUnitId).then(function() {-->
+<!--                        console.log('Rewarded video ad displayed');-->
+<!--                    }).catch(function(error) {-->
+<!--                        console.log('Error showing rewarded video ad: ' + error);-->
+<!--                    });-->
+<!--                }).catch(function(error) {-->
+<!--                    console.error('Error loading FBInstant ad: ' + error);-->
+<!--                });-->
+<!--            } else {-->
+<!--                console.error('FBInstant is not available.');-->
+<!--            }-->
+<!--        }-->
 
-    <!--        // Define onRewardedAdCompleted method correctly-->
-    <!--        function onRewardedAdCompleted(callback) {-->
-    <!--            // Check if the method addEventListener is available before using it-->
-    <!--            if (typeof FBInstant.addEventListener === 'function') {-->
-    <!--                FBInstant.addEventListener('rewardedvideoadcompleted', function() {-->
-    <!--                    console.log('Rewarded video ad completed!');-->
-    <!--                    callback(); // Trigger the callback function-->
-    <!--                });-->
-    <!--            } else {-->
-    <!--                console.error('FBInstant.addEventListener is not available.');-->
-    <!--            }-->
-    <!--        }-->
-    <!--    </script>-->
+<!--        // Define onRewardedAdCompleted method correctly-->
+<!--        function onRewardedAdCompleted(callback) {-->
+<!--            // Check if the method addEventListener is available before using it-->
+<!--            if (typeof FBInstant.addEventListener === 'function') {-->
+<!--                FBInstant.addEventListener('rewardedvideoadcompleted', function() {-->
+<!--                    console.log('Rewarded video ad completed!');-->
+<!--                    callback(); // Trigger the callback function-->
+<!--                });-->
+<!--            } else {-->
+<!--                console.error('FBInstant.addEventListener is not available.');-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
 </head>
 <body>
 <!-- This script installs service_worker.js to provide PWA functionality to
