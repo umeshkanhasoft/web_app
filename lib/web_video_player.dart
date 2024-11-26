@@ -29,6 +29,8 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
   RxBool videoIsLoaded = false.obs;
   VideoPlayerController? videoPlayerController;
   RxString title = "".obs;
+  RxBool isMovie = false.obs;
+  RxList<Map<String, dynamic>> listOfMovie = <Map<String, dynamic>>[].obs;
 
   @override
   void initState() {
@@ -45,11 +47,15 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
       String videoId = "${uri.queryParameters['id']}";
       if (uri.queryParameters.containsKey('isMovie') &&
           (uri.queryParameters['isMovie'] as String) == "true") {
+        isMovie.value = true;
         // load Movie using id
         final response = await http.get(Uri.parse(
             'https://raw.githubusercontent.com/zsaergddtgdgt/ksnvbhsbvujcadgbvui/refs/heads/master/test.json'));
         Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('AllMovieDataList')) {
+          for (var e in (data['AllMovieDataList'] as List)) {
+            listOfMovie.add(e);
+          }
           Map<String, dynamic> movieObject = (data['AllMovieDataList'] as List)
               .firstWhere((element) => (element as Map)['id'] == videoId,
                   orElse: () => {});
@@ -165,6 +171,22 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
     super.dispose();
   }
 
+  List<Widget> getMovieList() {
+    List<Widget> widget = [];
+
+    for (var element in listOfMovie) {
+      widget.add(GestureDetector(
+        child: ListTile(
+          tileColor: Colors.amber,
+          title: Text(element['mn']),
+        ),
+        onTap: () {},
+      ));
+    }
+
+    return widget;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -173,13 +195,13 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
           return Text(title.value);
         }),
       ),
-      endDrawer: const Drawer(
+      endDrawer: Drawer(
         child: Center(
-          child: Column(
-            children: [
-              Text('End Drawer'),
-            ],
-          ),
+          child: Obx(() {
+            return ListView(
+              children: isMovie.value == true ? getMovieList() : [],
+            );
+          }),
         ),
       ),
       body: Obx(() {
