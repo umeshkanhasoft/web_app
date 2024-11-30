@@ -1,16 +1,12 @@
 import 'dart:convert';
 
-import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-import 'package:video_player/video_player.dart';
-import 'package:web_app/web_video_control.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'dart:html' as html;
+import 'dart:js' as js;
 import 'package:http/http.dart' as http;
-import 'js/facebook_ads.dart';
-
-import 'data_manager.dart';
 
 class WebVideoPlayer extends StatefulWidget {
   const WebVideoPlayer({super.key});
@@ -20,42 +16,44 @@ class WebVideoPlayer extends StatefulWidget {
 }
 
 class WebVideoPlayerState extends State<WebVideoPlayer> {
-  late FlickManager flickManager;
-  late DataManager? dataManager;
   RxBool isLoading = false.obs;
   RxBool hasDataFounded = false.obs;
   RxList<String> playableUrls = <String>[].obs;
   RxInt currentPlayerIndex = 0.obs;
   RxBool videoIsLoaded = false.obs;
-  VideoPlayerController? videoPlayerController;
   RxString title = "".obs;
   RxBool isMovie = false.obs;
   RxList<Map<String, dynamic>> listOfMovie = <Map<String, dynamic>>[].obs;
+  Player player = Player();
+  VideoController? controller;
 
   @override
   void initState() {
     super.initState();
+    controller = VideoController(player);
     setUpData();
   }
 
   setUpData() async {
-    isLoading.value = true;
     String url = html.window.location.href;
     // Create a Uri object from the current URL
     Uri uri = Uri.parse(url);
-    if (uri.queryParameters.containsKey('id')) {
-      String videoId = "${uri.queryParameters['id']}";
-      if (uri.queryParameters.containsKey('isMovie') &&
-          (uri.queryParameters['isMovie'] as String) == "true") {
-        isMovie.value = true;
-        // load Movie using id
-        final response = await http.get(Uri.parse(
-            'https://raw.githubusercontent.com/zsaergddtgdgt/ksnvbhsbvujcadgbvui/refs/heads/master/test.json'));
-        Map<String, dynamic> data = json.decode(response.body);
-        if (data.containsKey('AllMovieDataList')) {
-          for (var e in (data['AllMovieDataList'] as List)) {
-            listOfMovie.add(e);
-          }
+    isLoading.value = true;
+    final response = await http.get(Uri.parse(
+        'https://raw.githubusercontent.com/zsaergddtgdgt/ksnvbhsbvujcadgbvui/refs/heads/master/test.json'));
+    Map<String, dynamic> data = json.decode(response.body);
+    isLoading.value = false;
+    if (data.containsKey('AllMovieDataList')) {
+      for (var e in (data['AllMovieDataList'] as List)) {
+        listOfMovie.add(e);
+      }
+      if (uri.queryParameters.containsKey('id')) {
+        String videoId = "${uri.queryParameters['id']}";
+        if (uri.queryParameters.containsKey('isMovie') &&
+            (uri.queryParameters['isMovie'] as String) == "true") {
+          isMovie.value = true;
+          // load Movie using id
+
           Map<String, dynamic> movieObject = (data['AllMovieDataList'] as List)
               .firstWhere((element) => (element as Map)['id'] == videoId,
                   orElse: () => {});
@@ -92,15 +90,14 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
             hasDataFounded.value = false;
           }
         } else {
-          hasDataFounded.value = false;
+          // load web series using Main-Id
         }
       } else {
-        // load web series using Main-Id
+        hasDataFounded.value = false;
       }
     } else {
       hasDataFounded.value = false;
     }
-    isLoading.value = false;
   }
 
   setUpFlickManager(String url) {
@@ -139,52 +136,17 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
       }
     });*/
 
-    videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url))
-      ..initialize()
-      ..addListener(
-        () {
-          // if (videoPlayerController?.value.hasError == true) {
-          //   hasDataFounded.value = false;
-          //   if (currentPlayerIndex.value < 4) {
-          //     currentPlayerIndex.value = currentPlayerIndex.value + 1;
-          //     videoPlayerController?.dispose();
-          //     setUpFlickManager(playableUrls[currentPlayerIndex.value]);
-          //     setState(() {});
-          //   }
-          // }
-        },
-      );
-
-    if (hasDataFounded.value) {
-      flickManager = FlickManager(
-          videoPlayerController: videoPlayerController!,
-          autoPlay: true,
-          autoInitialize: true);
-      dataManager = DataManager(flickManager: flickManager, urls: []);
-      videoIsLoaded.value = true;
-    }
+    player.open(Media(url)).then((value) {
+      if (hasDataFounded.value) {
+        videoIsLoaded.value = true;
+      }
+    });
   }
 
   @override
   void dispose() {
-    flickManager.dispose();
+    player.dispose();
     super.dispose();
-  }
-
-  List<Widget> getMovieList() {
-    List<Widget> widget = [];
-
-    for (var element in listOfMovie) {
-      widget.add(GestureDetector(
-        child: ListTile(
-          tileColor: Colors.amber,
-          title: Text(element['mn']),
-        ),
-        onTap: () {},
-      ));
-    }
-
-    return widget;
   }
 
   @override
@@ -198,8 +160,27 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
       endDrawer: Drawer(
         child: Center(
           child: Obx(() {
-            return ListView(
-              children: isMovie.value == true ? getMovieList() : [],
+            return ListView.builder(
+              itemBuilder: (context, index) => GestureDetector(
+                child: ListTile(
+                  title: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        listOfMovie[index]['mn'],
+                        style: const TextStyle(color: Colors.white),
+                      )),
+                ),
+                onTap: () async {
+                  String movieUrl =
+                      'https://umeshkanhasoft.github.io/web_app/?id=${listOfMovie[index]['id']}&isMovie=true';
+                  js.context.callMethod('open', [movieUrl]);
+                },
+              ),
+              itemCount: listOfMovie.length,
             );
           }),
         ),
@@ -212,32 +193,7 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
                 ),
               )
             : hasDataFounded.value
-                ? VisibilityDetector(
-                    key: ObjectKey(flickManager),
-                    onVisibilityChanged: (visibility) {
-                      if (visibility.visibleFraction == 0 && mounted) {
-                        flickManager.flickControlManager?.autoPause();
-                      } else if (visibility.visibleFraction == 1) {
-                        flickManager.flickControlManager?.autoResume();
-                      }
-                    },
-                    child: FlickVideoPlayer(
-                      flickManager: flickManager,
-                      flickVideoWithControls: FlickVideoWithControls(
-                        controls: WebVideoControl(
-                          dataManager: dataManager!,
-                          iconSize: 30,
-                          fontSize: 14,
-                          progressBarSettings: FlickProgressBarSettings(
-                            height: 5,
-                            handleRadius: 5.5,
-                          ),
-                        ),
-                        videoFit: BoxFit.contain,
-                        // aspectRatioWhenLoading: 4 / 3,
-                      ),
-                    ),
-                  )
+                ? Video(controller: controller!)
                 : const Center(
                     child: Text(
                         style: TextStyle(fontSize: 25),
