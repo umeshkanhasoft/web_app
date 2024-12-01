@@ -107,14 +107,16 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
               "${movieObject['s3']}",
               "${movieObject['s4']}"
             ];
-            hdArray.removeWhere((element) => element == "FALSE");
+            hdArray.removeWhere((element) =>
+                element == "FALSE" || element == '' || element == '.mkv.mp4');
             List<String> nonHdArray = [
               "${movieObject['4s1']}",
               "${movieObject['4s2']}",
               "${movieObject['4s3']}",
               "${movieObject['4s4']}"
             ];
-            nonHdArray.removeWhere((element) => element == "FALSE");
+            nonHdArray.removeWhere((element) =>
+                element == "FALSE" || element == '' || element == '.mkv.mp4');
             playableUrls.value = isHd == true
                 ? hdArray
                 : (movieObject.containsKey('480p') &&
