@@ -199,7 +199,7 @@ class WebVideoPlayerState extends State<WebVideoPlayer> {
                     onTap: () async {
                       String movieUrl =
                           'https://umeshkanhasoft.github.io/web_app/?id=${filteredList[index]['id']}&isMovie=true';
-                      js.context.callMethod('open', [movieUrl]);
+                      html.window.location.replace(movieUrl);
                     },
                   ),
                   itemCount: filteredList.length,
