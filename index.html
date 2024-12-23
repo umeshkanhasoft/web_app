@@ -1,170 +1,249 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <!--
-      If you are serving your web app in a path other than the root, change the
-      href value below to reflect the base path you are serving from.
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
 
-      The path provided below has to start and end with a slash "/" in order for
-      it to work correctly.
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
 
-      For more details:
-      * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+    Fore more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+  -->
+    <!-- <base href="/"> -->
+    <base href="./" />
 
-      This is a placeholder for base href that will be replaced by the value of
-      the `--base-href` argument provided to `flutter build`.
-    -->
-    <base href="./">
-
-    <meta charset="UTF-8">
-    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-    <meta name="description" content="A new Flutter project.">
+    <meta charset="UTF-8" />
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+    <meta name="description" content="A new Flutter project." />
 
     <!-- iOS meta tags & icons -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="web_app">
-    <link rel="apple-touch-icon" href="icons/Icon-192.png">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="admin" />
+    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png"/>
+    <link rel="icon" type="image/png" href="favicon.png" />
 
-    <title>web_app</title>
-    <link rel="manifest" href="manifest.json">
-    <script>
-            document.addEventListener('contextmenu', function (event) {
-              event.preventDefault();
-              alert("Right-click is disabled.");
-            });
-        </script>
-    <script>
-            document.addEventListener('keydown', function (event) {
-              if (event.key === "F12" || (event.ctrlKey && event.shiftKey && event.key === "I")) {
-                event.preventDefault();
-                alert("Inspect element is disabled.");
-              }
-            });
-        </script>
-
-<!--    <script async="async" src="https://connect.facebook.net/en_US/fbinstant.js"></script>-->
-<!--    <script>-->
-<!--        const rewardedAdUnitId = '224530612046551_224532765379669'; // Replace with your actual Ad Unit ID-->
-
-<!--        window.fbAsyncInit = function() {-->
-<!--            FBInstant.initializeAsync().then(function() {-->
-<!--                console.log("FBInstant initialized successfully.");-->
-
-<!--                // Now setup event listeners after initialization-->
-<!--                onRewardedAdCompleted(function() {-->
-<!--                    console.log('Rewarded ad completed!');-->
-<!--                });-->
-
-<!--                // Show the ad after initialization-->
-<!--                showRewardedAd();-->
-<!--            }).catch(function(error) {-->
-<!--                console.error("Error initializing FBInstant:", error);-->
-<!--            });-->
-<!--        };-->
-
-<!--        // Show the rewarded ad-->
-<!--        function showRewardedAd() {-->
-<!--            if (FBInstant) {-->
-<!--                FBInstant.loadAsync().then(function() {-->
-<!--                    FBInstant.showAdAsync(rewardedAdUnitId).then(function() {-->
-<!--                        console.log('Rewarded video ad displayed');-->
-<!--                    }).catch(function(error) {-->
-<!--                        console.log('Error showing rewarded video ad: ' + error);-->
-<!--                    });-->
-<!--                }).catch(function(error) {-->
-<!--                    console.error('Error loading FBInstant ad: ' + error);-->
-<!--                });-->
-<!--            } else {-->
-<!--                console.error('FBInstant is not available.');-->
-<!--            }-->
-<!--        }-->
-
-<!--        // Define onRewardedAdCompleted method correctly-->
-<!--        function onRewardedAdCompleted(callback) {-->
-<!--            // Check if the method addEventListener is available before using it-->
-<!--            if (typeof FBInstant.addEventListener === 'function') {-->
-<!--                FBInstant.addEventListener('rewardedvideoadcompleted', function() {-->
-<!--                    console.log('Rewarded video ad completed!');-->
-<!--                    callback(); // Trigger the callback function-->
-<!--                });-->
-<!--            } else {-->
-<!--                console.error('FBInstant.addEventListener is not available.');-->
-<!--            }-->
-<!--        }-->
-<!--    </script>-->
-</head>
-<body>
-<!-- This script installs service_worker.js to provide PWA functionality to
-     application. For more information, see:
-     https://developers.google.com/web/fundamentals/primers/service-workers -->
-<script>
-    const serviceWorkerVersion = "2391738558";
-    var scriptLoaded = false;
-    function loadMainDartJs() {
-      if (scriptLoaded) {
-        return;
+    <title>admin</title>
+    <link rel="manifest" href="manifest.json" />
+    <!-- Styling for loading indicator -->
+    <style>
+      body {
+        background: #000;
       }
-      scriptLoaded = true;
-      var scriptTag = document.createElement('script');
-      scriptTag.src = 'main.dart.js';
-      scriptTag.type = 'application/javascript';
-      document.body.append(scriptTag);
-    }
 
-    if ('serviceWorker' in navigator) {
-      // Service workers are supported. Use them.
-      window.addEventListener('load', function () {
-        // Wait for registration to finish before dropping the <script> tag.
-        // Otherwise, the browser will load the script multiple times,
-        // potentially different versions.
-        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
-        navigator.serviceWorker.register(serviceWorkerUrl)
-          .then((reg) => {
-            function waitForActivation(serviceWorker) {
-              serviceWorker.addEventListener('statechange', () => {
-                if (serviceWorker.state == 'activated') {
-                  console.log('Installed new service worker.');
-                  loadMainDartJs();
-                }
-              });
-            }
-            if (!reg.active && (reg.installing || reg.waiting)) {
-              // No active web worker and we have installed or are installing
-              // one for the first time. Simply wait for it to activate.
-              waitForActivation(reg.installing || reg.waiting);
-            } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
-              // When the app updates the serviceWorkerVersion changes, so we
-              // need to ask the service worker to update.
-              console.log('New service worker available.');
-              reg.update();
-              waitForActivation(reg.installing);
-            } else {
-              // Existing service worker is still good.
-              console.log('Loading app from service worker.');
-              loadMainDartJs();
-            }
-          });
+      #load {
+        position: absolute;
+        width: 600px;
+        height: 36px;
+        left: 50%;
+        top: 40%;
+        margin-left: -300px;
+        overflow: visible;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: default;
+      }
 
-        // If service worker doesn't succeed in a reasonable amount of time,
-        // fallback to plaint <script> tag.
-        setTimeout(() => {
-          if (!scriptLoaded) {
-            console.warn(
-              'Failed to load app from service worker. Falling back to plain <script> tag.',
-            );
-            loadMainDartJs();
+      #load div {
+        position: absolute;
+        width: 20px;
+        height: 36px;
+        opacity: 0;
+        font-family: Helvetica, Arial, sans-serif;
+        animation: move 2s linear infinite;
+        -o-animation: move 2s linear infinite;
+        -moz-animation: move 2s linear infinite;
+        -webkit-animation: move 2s linear infinite;
+        transform: rotate(180deg);
+        -o-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -webkit-transform: rotate(180deg);
+        color: #35c4f0;
+      }
+
+      #load div:nth-child(2) {
+        animation-delay: 0.2s;
+        -o-animation-delay: 0.2s;
+        -moz-animation-delay: 0.2s;
+        -webkit-animation-delay: 0.2s;
+      }
+      #load div:nth-child(3) {
+        animation-delay: 0.4s;
+        -o-animation-delay: 0.4s;
+        -webkit-animation-delay: 0.4s;
+        -webkit-animation-delay: 0.4s;
+      }
+      #load div:nth-child(4) {
+        animation-delay: 0.6s;
+        -o-animation-delay: 0.6s;
+        -moz-animation-delay: 0.6s;
+        -webkit-animation-delay: 0.6s;
+      }
+      #load div:nth-child(5) {
+        animation-delay: 0.8s;
+        -o-animation-delay: 0.8s;
+        -moz-animation-delay: 0.8s;
+        -webkit-animation-delay: 0.8s;
+      }
+      #load div:nth-child(6) {
+        animation-delay: 1s;
+        -o-animation-delay: 1s;
+        -moz-animation-delay: 1s;
+        -webkit-animation-delay: 1s;
+      }
+      #load div:nth-child(7) {
+        animation-delay: 1.2s;
+        -o-animation-delay: 1.2s;
+        -moz-animation-delay: 1.2s;
+        -webkit-animation-delay: 1.2s;
+      }
+
+      @keyframes move {
+        0% {
+          left: 0;
+          opacity: 0;
+        }
+        35% {
+          left: 41%;
+          -moz-transform: rotate(0deg);
+          -webkit-transform: rotate(0deg);
+          -o-transform: rotate(0deg);
+          transform: rotate(0deg);
+          opacity: 1;
+        }
+        65% {
+          left: 59%;
+          -moz-transform: rotate(0deg);
+          -webkit-transform: rotate(0deg);
+          -o-transform: rotate(0deg);
+          transform: rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          left: 100%;
+          -moz-transform: rotate(-180deg);
+          -webkit-transform: rotate(-180deg);
+          -o-transform: rotate(-180deg);
+          transform: rotate(-180deg);
+          opacity: 0;
+        }
+      }
+
+      @-moz-keyframes move {
+        0% {
+          left: 0;
+          opacity: 0;
+        }
+        35% {
+          left: 41%;
+          -moz-transform: rotate(0deg);
+          transform: rotate(0deg);
+          opacity: 1;
+        }
+        65% {
+          left: 59%;
+          -moz-transform: rotate(0deg);
+          transform: rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          left: 100%;
+          -moz-transform: rotate(-180deg);
+          transform: rotate(-180deg);
+          opacity: 0;
+        }
+      }
+
+      @-webkit-keyframes move {
+        0% {
+          left: 0;
+          opacity: 0;
+        }
+        35% {
+          left: 41%;
+          -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+          opacity: 1;
+        }
+        65% {
+          left: 59%;
+          -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          left: 100%;
+          -webkit-transform: rotate(-180deg);
+          transform: rotate(-180deg);
+          opacity: 0;
+        }
+      }
+
+      @-o-keyframes move {
+        0% {
+          left: 0;
+          opacity: 0;
+        }
+        35% {
+          left: 41%;
+          -o-transform: rotate(0deg);
+          transform: rotate(0deg);
+          opacity: 1;
+        }
+        65% {
+          left: 59%;
+          -o-transform: rotate(0deg);
+          transform: rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          left: 100%;
+          -o-transform: rotate(-180deg);
+          transform: rotate(-180deg);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Loading Indicator -->
+    <div id="load">
+      <div>L</div>
+      <div>O</div>
+      <div>A</div>
+      <div>D</div>
+      <div>I</div>
+      <div>N</div>
+      <div>G</div>
+    </div>
+    <!-- This script installs service_worker.js to provide PWA functionality to
+       application. For more information, see:
+       https://developers.google.com/web/fundamentals/primers/service-workers -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("flutter-first-frame", function () {
+          navigator.serviceWorker.register("flutter_service_worker.js");
+        });
+      }
+    </script>
+    <script src="main.dart.js" type="application/javascript"></script>
+    <!-- Removes the loading indicator after 10 seconds -->
+    <script>
+      window.onload = function () {
+        setTimeout(function () {
+          var loadingIndicator = document.getElementById("loading_container");
+          if (loadingIndicator) {
+            loadingIndicator.remove();
           }
-        }, 4000);
-      });
-    } else {
-      // Service workers not supported. Just drop the <script> tag.
-      loadMainDartJs();
-    }
-</script>
-</body>
+        }, 1000);
+      };
+    </script>
+  </body>
 </html>
